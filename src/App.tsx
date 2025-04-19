@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +5,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import About from "./pages/About";
+import Gallery from "./pages/Gallery";
+import Packages from "./pages/Packages";
+import Amenities from "./pages/Amenities";
+import Events from "./pages/Events";
+import FAQ from "./pages/FAQ";
+import Contact from "./pages/Contact";
+import Booking from "./pages/Booking";
 
 const queryClient = new QueryClient();
 
@@ -17,18 +24,16 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* These routes will be implemented in future iterations */}
-          <Route path="/about" element={<NotFound />} />
-          <Route path="/gallery" element={<NotFound />} />
-          <Route path="/packages" element={<NotFound />} />
-          <Route path="/amenities" element={<NotFound />} />
-          <Route path="/events" element={<NotFound />} />
-          <Route path="/faq" element={<NotFound />} />
-          <Route path="/contact" element={<NotFound />} />
-          <Route path="/booking" element={<NotFound />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/packages" element={<Packages />} />
+          <Route path="/amenities" element={<Amenities />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/booking" element={<Booking />} />
           <Route path="/privacy" element={<NotFound />} />
           <Route path="/terms" element={<NotFound />} />
-          {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
