@@ -38,12 +38,14 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white bg-opacity-95 shadow-md py-3' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-3' : 'bg-white/90 backdrop-blur-sm py-4'}`}>
       <div className="luxury-container flex justify-between items-center">
         <Link to="/" className="flex items-center">
-          <span className={`font-display text-3xl font-bold ${isScrolled || isMenuOpen ? 'text-vivenza-black' : 'text-white'}`}>
-            Vivenza
-          </span>
+          <img 
+            src="/lovable-uploads/f7259396-a380-4393-a566-71f24cfa3088.png" 
+            alt="Vivenza Logo" 
+            className="h-12 w-auto"
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -52,7 +54,7 @@ const Navbar: React.FC = () => {
             <Link
               key={link.name}
               to={link.path}
-              className={`gold-underline font-medium ${isScrolled ? 'text-vivenza-black' : 'text-white'}`}
+              className={`gold-underline font-medium text-vivenza-black`}
             >
               {link.name}
             </Link>
@@ -76,9 +78,9 @@ const Navbar: React.FC = () => {
           aria-label="Toggle menu"
         >
           {isMenuOpen ? (
-            <X className={`h-7 w-7 ${isScrolled ? 'text-vivenza-black' : 'text-white'}`} />
+            <X className="h-7 w-7 text-vivenza-black" />
           ) : (
-            <Menu className={`h-7 w-7 ${isScrolled ? 'text-vivenza-black' : 'text-white'}`} />
+            <Menu className="h-7 w-7 text-vivenza-black" />
           )}
         </button>
       </div>

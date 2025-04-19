@@ -2,21 +2,29 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
+import { format } from "date-fns"
+import { Calendar } from "@/components/ui/calendar"
+import { Input } from "@/components/ui/input"
+import { CalendarIcon } from "lucide-react"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 const Booking = () => {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
-  const [totalPrice, setTotalPrice] = React.useState(36000); // Default price
+  const [checkIn, setCheckIn] = React.useState<Date>();
+  const [checkOut, setCheckOut] = React.useState<Date>();
+  const [totalPrice, setTotalPrice] = React.useState(36000);
 
   const handlePackageChange = (value: string) => {
     setTotalPrice(value === "farmhouse" ? 36000 : 26000);
@@ -25,7 +33,7 @@ const Booking = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-grow bg-vivenza-offWhite">
+      <div className="flex-grow bg-vivenza-offWhite pt-24">
         <div className="luxury-container py-20">
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-medium text-center mb-6">
             Book Your Stay
@@ -34,7 +42,7 @@ const Booking = () => {
 
           <div className="grid md:grid-cols-2 gap-12">
             <div className="bg-white p-8 rounded-lg shadow-lg">
-              <h3 className="font-display text-2xl mb-6">Select Package & Date</h3>
+              <h3 className="font-display text-2xl mb-6">Select Package & Dates</h3>
               
               <div className="space-y-6">
                 <div>
@@ -50,14 +58,49 @@ const Booking = () => {
                   </Select>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">Select Date</label>
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border"
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Check-in Date</label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline" className="w-full justify-start text-left font-normal">
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {checkIn ? format(checkIn, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={checkIn}
+                          onSelect={setCheckIn}
+                          initialFocus
+                          className="rounded-md border"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Check-out Date</label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline" className="w-full justify-start text-left font-normal">
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {checkOut ? format(checkOut, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={checkOut}
+                          onSelect={setCheckOut}
+                          initialFocus
+                          disabled={(date) => !checkIn || date < checkIn}
+                          className="rounded-md border"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                 </div>
 
                 <div>
