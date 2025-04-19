@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
           <img 
             src="/lovable-uploads/f7259396-a380-4393-a566-71f24cfa3088.png" 
             alt="Vivenza Logo" 
-            className="h-12 w-auto"
+            className="h-24 w-auto"
           />
         </Link>
 
