@@ -33,8 +33,8 @@ const Booking = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-grow bg-vivenza-offWhite pt-24">
-        <div className="luxury-container py-20">
+      <div className="flex-grow  bg-vivenza-offWhite pt-24">
+        <div className="luxury-container py-16">
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-medium text-center mb-6">
             Book Your Stay
           </h1>

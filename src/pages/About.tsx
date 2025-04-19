@@ -7,9 +7,9 @@ const About = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-grow bg-vivenza-offWhite">
+      <div className="flex-grow mt-9 bg-vivenza-offWhite">
         <div className="luxury-container py-20">
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-medium text-center mb-6">
+          <h1 className="font-display mt-3 text-4xl md:text-5xl lg:text-6xl font-medium text-center mb-6">
             About Vivenza
           </h1>
           <div className="gold-divider mx-auto mb-12"></div>

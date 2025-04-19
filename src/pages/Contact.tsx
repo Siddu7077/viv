@@ -15,9 +15,9 @@ const Contact = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-grow bg-vivenza-offWhite">
+      <div className="flex-grow mt-10 bg-vivenza-offWhite">
         <div className="luxury-container py-20">
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-medium text-center mb-6">
+          <h1 className="font-display mt-3 text-4xl md:text-5xl lg:text-6xl font-medium text-center mb-6">
             Contact Us
           </h1>
           <div className="gold-divider mx-auto mb-12"></div>
@@ -36,9 +36,9 @@ const Contact = () => {
               <div>
                 <h3 className="font-display text-2xl mb-4">Contact Information</h3>
                 <div className="space-y-3">
-                  <p className="text-vivenza-black/80">Phone: +91 XXXXXXXXXX</p>
+                  <p className="text-vivenza-black/80">Phone: +91 9697798888</p>
                   <p className="text-vivenza-black/80">Email: info@vivenza.com</p>
-                  <p className="text-vivenza-black/80">WhatsApp: +91 XXXXXXXXXX</p>
+                  <p className="text-vivenza-black/80">WhatsApp: +91 9697798888</p>
                 </div>
               </div>
 

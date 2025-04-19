@@ -38,8 +38,8 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-3' : 'bg-white/90 backdrop-blur-sm py-4'}`}>
-      <div className="luxury-container flex justify-between items-center">
+    <nav className={`fixed w-full  z-50  transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-3 ' : 'bg-white/90 backdrop-blur-sm py-4'}`}>
+      <div className="luxury-container flex justify-between items-center ">
         <Link to="/" className="flex items-center">
           <img 
             src="/lovable-uploads/f7259396-a380-4393-a566-71f24cfa3088.png" 
@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex space-x-8">
+        <div className="hidden lg:flex space-x-8 ">
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -87,7 +87,7 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-white shadow-xl animate-fade-in">
+        <div className="lg:hidden  bg-white shadow-xl animate-fade-in">
           <div className="flex flex-col py-6 space-y-3 px-6">
             {navLinks.map((link) => (
               <Link
