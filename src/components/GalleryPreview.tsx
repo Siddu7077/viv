@@ -5,27 +5,27 @@ import { Link } from 'react-router-dom';
 const GalleryPreview: React.FC = () => {
   const images = [
     {
-      src: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+      src: " /5.jpeg",
       alt: "Vivenza Garden at Night",
       category: "Night View"
     },
     {
-      src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-      alt: "Vivenza Lake View",
+      src:  "/7.jpeg",
+      alt: "Vivenza Pool View",
       category: "Garden"
     },
     {
-      src: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
+      src: "/16.jpeg",
       alt: "Vivenza Relaxation Area",
       category: "Farmhouse"
     },
     {
-      src: "https://images.unsplash.com/photo-1518495973542-4542c06a5843",
+      src: "/13.jpeg",
       alt: "Vivenza Natural Surroundings",
       category: "Garden"
     },
     {
-      src: "https://images.unsplash.com/photo-1472396961693-142e6e269027",
+      src: "https://s7ap1.scene7.com/is/image/incredibleindia/mrugavani-national-park-hyderabad-secunderabad-telangana-4-attr-hero?qlt=82&ts=1726674399232",
       alt: "Wildlife at Vivenza",
       category: "Events"
     },

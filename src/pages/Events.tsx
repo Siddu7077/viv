@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -9,22 +8,22 @@ const Events = () => {
     {
       title: "Weddings",
       description: "Create magical memories in our stunning outdoor venue, perfect for ceremonies and receptions.",
-      image: "https://images.unsplash.com/photo-1472396961693-142e6e269027"
+      image: "https://adminmahaspice.in/ms3/uploads/sectionThree/679b7307be2e1_1738240775.webp"
     },
     {
       title: "Corporate Retreats",
       description: "An ideal setting for team building, conferences, and business meetings.",
-      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
+      image: "https://adminmahaspice.in/ms3/uploads/sectionThree/679b758c8e177_1738241420.webp"
     },
     {
       title: "Birthday Celebrations",
       description: "Celebrate your special day in style with our versatile event spaces.",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+      image: "https://adminmahaspice.in/ms3/uploads/event_categories/679c857bd2de2_birthday.webp"
     },
     {
       title: "Private Parties",
       description: "From bachelor parties to family reunions, we cater to all your celebration needs.",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+      image: "https://adminmahaspice.in/ms3/uploads/event_categories/679c85f62436f_cocktail.webp"
     }
   ];
 
@@ -38,17 +37,19 @@ const Events = () => {
           </h1>
           <div className="gold-divider mx-auto mb-12"></div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
+          <div className="grid md:grid-cols-2 gap-10 mb-16">
             {eventTypes.map((event) => (
               <div key={event.title} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <img 
-                  src={event.image} 
-                  alt={event.title} 
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <h3 className="font-display text-2xl mb-4">{event.title}</h3>
-                  <p className="text-vivenza-black/80 mb-6">{event.description}</p>
+                <div className="w-full h-96 overflow-hidden">
+                  <img 
+                    src={event.image} 
+                    alt={event.title} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-8">
+                  <h3 className="font-display text-3xl mb-4">{event.title}</h3>
+                  <p className="text-vivenza-black/80 mb-6 text-lg">{event.description}</p>
                   <Link to="/booking" className="luxury-button inline-block">
                     Book Now
                   </Link>
@@ -57,9 +58,9 @@ const Events = () => {
             ))}
           </div>
 
-          <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-            <h3 className="font-display text-2xl mb-4">Custom Event Planning</h3>
-            <p className="text-vivenza-black/80 mb-6">
+          <div className="bg-white p-10 rounded-lg shadow-lg text-center">
+            <h3 className="font-display text-3xl mb-4">Custom Event Planning</h3>
+            <p className="text-vivenza-black/80 mb-6 text-lg">
               Have a unique event in mind? Contact our event planning team to create your perfect celebration.
             </p>
             <Link to="/contact" className="luxury-button inline-block">

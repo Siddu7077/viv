@@ -8,7 +8,7 @@ const Hero: React.FC = () => {
       <div className="absolute inset-0 overflow-hidden">
         {/* Hero background image */}
         <img
-          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+          src= " /5.jpeg"
           alt="Vivenza Luxury Farmhouse"
           className="h-full w-full object-cover"
         />

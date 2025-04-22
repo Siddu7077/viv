@@ -4,13 +4,13 @@ import React from 'react';
 const Accommodations: React.FC = () => {
   const accommodations = [
     {
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
+      image: " /5.jpeg",
       title: "Farmhouse Stay",
       description: "Private, luxurious villa-style accommodation with 8 air-conditioned bedrooms and 4 spacious halls.",
       features: ["8 AC Bedrooms", "4 Bathrooms", "4 Spacious Halls", "Multiple Lounges"]
     },
     {
-      image: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+      image:  "/3.jpeg",
       title: "Open Garden Area",
       description: "Perfect venue for large events with beautiful landscaping that can accommodate up to 500 guests.",
       features: ["Large Event Space", "Beautifully Landscaped", "Up to 500 Guests", "Open-air Experience"]
