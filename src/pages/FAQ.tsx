@@ -13,7 +13,7 @@ const FAQ = () => {
   const faqs = [
     {
       question: "What is the check-in and check-out time?",
-      answer: "Check-in time is 2:00 PM and check-out time is 11:00 AM. Early check-in or late check-out may be available upon request."
+      answer: "Check-in time is 12:00 PM and check-out time is 11:00 AM. Early check-in or late check-out may be available upon request."
     },
     {
       question: "What is the booking and payment policy?",
