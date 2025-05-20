@@ -15,6 +15,9 @@ import Contact from "./pages/Contact";
 import Booking from "./pages/Booking";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import Return from "./pages/Return";
+import Refund from "./pages/Refund";
+import Shipping from "./pages/Shipping";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +39,9 @@ const App = () => (
           <Route path="/booking" element={<Booking />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/shipping-policy" element={<Shipping />} />
+          <Route path="/refund-cancellation" element={<Refund />} />
+          <Route path="/return-policy" element={<Return />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

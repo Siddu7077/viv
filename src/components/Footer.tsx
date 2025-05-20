@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -87,6 +86,21 @@ const Footer: React.FC = () => {
                   Book Now
                 </Link>
               </li>
+              <li>
+                <Link to="/return-policy" className="text-white/70 hover:text-vivenza-gold transition-colors">
+                  Return Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/refund-cancellation" className="text-white/70 hover:text-vivenza-gold transition-colors">
+                  Refund & Cancellation
+                </Link>
+              </li>
+              <li>
+                <Link to="/shipping-policy" className="text-white/70 hover:text-vivenza-gold transition-colors">
+                  Shipping Policy
+                </Link>
+              </li>
             </ul>
           </div>
           
@@ -117,12 +131,21 @@ const Footer: React.FC = () => {
             <div className="text-white/60 text-sm mb-4 md:mb-0">
               &copy; {currentYear} Vivenza Luxury Farmhouse. All rights reserved.
             </div>
-            <div className="flex space-x-6">
+            <div className="flex flex-wrap gap-4 md:space-x-6">
               <Link to="/privacy" className="text-white/60 text-sm hover:text-white transition-colors">
                 Privacy Policy
               </Link>
               <Link to="/terms" className="text-white/60 text-sm hover:text-white transition-colors">
                 Terms of Service
+              </Link>
+              <Link to="/return-policy" className="text-white/60 text-sm hover:text-white transition-colors">
+                Return Policy
+              </Link>
+              <Link to="/refund-cancellation" className="text-white/60 text-sm hover:text-white transition-colors">
+                Refund & Cancellation
+              </Link>
+              <Link to="/shipping-policy" className="text-white/60 text-sm hover:text-white transition-colors">
+                Shipping Policy
               </Link>
             </div>
           </div>
