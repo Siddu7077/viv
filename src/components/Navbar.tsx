@@ -38,7 +38,8 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className={`fixed w-full  z-50  transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-3 ' : 'bg-white/90 backdrop-blur-sm py-4'}`}>
+    <nav className={`fixed w-full mb-52  z-50  transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-3 ' : 'bg-white/90 backdrop-blur-sm py-4'}`}>
+      
       <div className="luxury-container flex justify-between items-center ">
         <Link to="/" className="flex items-center">
           <img 
