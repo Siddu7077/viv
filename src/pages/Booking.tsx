@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { format } from "date-fns";
+import { format, addDays, isSameDay } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { CalendarIcon, InfoIcon } from "lucide-react";
@@ -46,7 +46,30 @@ const Booking = () => {
     lunch: 0,
     dinner: 0
   });
-const [isLoading, setIsLoading] = useState(false);
+  const [mealDates, setMealDates] = useState({
+    breakfast: [] as Date[],
+    lunch: [] as Date[],
+    dinner: [] as Date[],
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [dateRange, setDateRange] = useState<Date[]>([]);
+
+  // Update date range when check-in or check-out changes
+  useEffect(() => {
+    if (checkIn && checkOut) {
+      const dates = [];
+      let currentDate = new Date(checkIn);
+      
+      while (currentDate <= checkOut) {
+        dates.push(new Date(currentDate));
+        currentDate = addDays(currentDate, 1);
+      }
+      
+      setDateRange(dates);
+    } else {
+      setDateRange([]);
+    }
+  }, [checkIn, checkOut]);
 
   // Handle package selection
   const handlePackageChange = (value: string) => {
@@ -62,19 +85,23 @@ const [isLoading, setIsLoading] = useState(false);
   };
 
   const handlePay = () => {
-  setIsLoading(true);
-  
-  // Simulate payment processing
-  setTimeout(() => {
-    setIsLoading(false);
-    alert("Redirecting to payment gateway...");
-    // You can navigate to the payment page here
-  }, 3000); // Simulate 3 seconds loading
-};
-
+    setIsLoading(true);
+    
+    // Simulate payment processing
+    setTimeout(() => {
+      setIsLoading(false);
+      alert("Redirecting to payment gateway...");
+      // You can navigate to the payment page here
+    }, 3000); // Simulate 3 seconds loading
+  };
 
   // Handle food service toggle
   const handleFoodServiceChange = (checked: boolean) => {
+    if (checked && (!checkIn || !checkOut)) {
+      alert("Please select check-in and check-out dates first");
+      return;
+    }
+    
     setIncludeFoodService(checked);
     if (!checked) {
       setFoodCost(0);
@@ -83,13 +110,23 @@ const [isLoading, setIsLoading] = useState(false);
         lunch: 0,
         dinner: 0
       });
+      setMealDates({
+        breakfast: [],
+        lunch: [],
+        dinner: []
+      });
     }
   };
 
   // Handle food cost updates from FoodService component
-  const handleFoodCostUpdate = (totalFoodCost: number, mealCostsObj: { breakfast: number, lunch: number, dinner: number }) => {
+  const handleFoodCostUpdate = (
+    totalFoodCost: number, 
+    mealCostsObj: { breakfast: number, lunch: number, dinner: number },
+    selectedDates: { breakfast: Date[], lunch: Date[], dinner: Date[] }
+  ) => {
     setFoodCost(totalFoodCost);
     setMealCosts(mealCostsObj);
+    setMealDates(selectedDates);
   };
 
   // Handle guest count change
@@ -127,6 +164,110 @@ const [isLoading, setIsLoading] = useState(false);
   
   // Total price calculation
   const totalPrice = calculateTotalPrice();
+
+  // Format meal dates for display
+  const formatMealDates = (dates: Date[]) => {
+    if (dates.length === 0) return "Not selected";
+    return dates.map(date => format(date, "MMM d")).join(", ");
+  };
+
+  // Order Summary Component
+  const OrderSummary = ({ className = "" }) => (
+    <div className={`bg-white border p-6 rounded-lg shadow-lg ${className}`}>
+      <h3 className="font-serif text-2xl mb-6">Order Summary</h3>
+      <div className="space-y-4">
+        <div className="flex justify-between">
+          <span>Base Package:</span>
+          <span>₹{basePrice.toLocaleString()}</span>
+        </div>
+        
+        {additionalServices.dj && (
+          <div className="flex justify-between">
+            <span>DJ Services:</span>
+            <span>₹10,000</span>
+          </div>
+        )}
+        
+        {additionalServices.drinking && (
+          <div className="flex justify-between">
+            <span>Drinking Permission:</span>
+            <span>₹15,000</span>
+          </div>
+        )}
+        
+        {additionalServices.bonfire && (
+          <div className="flex justify-between">
+            <span>Bonfire:</span>
+            <span>₹2,500</span>
+          </div>
+        )}
+        
+        {includeFoodService && foodCost > 0 && (
+          <>
+            <div className="pt-2 border-t border-dashed">
+              <div className="text-lg font-medium mb-2">Food Services</div>
+              
+              {mealCosts.breakfast > 0 && (
+                <div className="space-y-1">
+                  <div className="flex justify-between">
+                    <span>Breakfast ({guestCount} guests):</span>
+                    <span>₹{mealCosts.breakfast.toLocaleString()}</span>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    Dates: {formatMealDates(mealDates.breakfast)} at 9:00 AM
+                  </div>
+                </div>
+              )}
+              
+              {mealCosts.lunch > 0 && (
+                <div className="space-y-1">
+                  <div className="flex justify-between">
+                    <span>Lunch ({guestCount} guests):</span>
+                    <span>₹{mealCosts.lunch.toLocaleString()}</span>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    Dates: {formatMealDates(mealDates.lunch)} at 2:00 PM
+                  </div>
+                </div>
+              )}
+              
+              {mealCosts.dinner > 0 && (
+                <div className="space-y-1">
+                  <div className="flex justify-between">
+                    <span>Dinner ({guestCount} guests):</span>
+                    <span>₹{mealCosts.dinner.toLocaleString()}</span>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    Dates: {formatMealDates(mealDates.dinner)} at 10:00 PM
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex justify-between font-medium pt-2">
+                <span>Total Food Cost:</span>
+                <span>₹{foodCost.toLocaleString()}</span>
+              </div>
+            </div>
+          </>
+        )}
+        
+        <div className="pt-4 border-t border-gray-300">
+          <div className="flex justify-between text-lg font-bold">
+            <span>Total:</span>
+            <span>₹{totalPrice.toLocaleString()}</span>
+          </div>
+        </div>
+      </div>
+      
+      <Button 
+        className="w-full mt-6 bg-amber-500 hover:bg-amber-600"
+        onClick={handlePay} 
+        disabled={isLoading || !checkIn || !checkOut}
+      >
+        {isLoading ? "Processing..." : "Proceed to Payment"}
+      </Button>
+    </div>
+  );
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -302,114 +443,45 @@ const [isLoading, setIsLoading] = useState(false);
                 </div>
               </div>
               
-              {/* Order Summary */}
-              
+              {/* Order Summary - Show here if food service is not included */}
+              {!includeFoodService && <OrderSummary />}
             </div>
           </div>
 
-          {/* Food Options Section - Only visible when food service is selected */}
+          {/* Food Options Section with Order Summary - Only visible when food service is selected */}
           {includeFoodService && (
-            <FoodService 
-              guestCount={guestCount} 
-              onFoodCostUpdate={handleFoodCostUpdate}
-            />
-          )}
-          
-
-          <div className="bg-white mt-16 border p-8 rounded-lg shadow-lg">
-                <h3 className="font-serif text-2xl mb-6">Order Summary</h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <span>Base Package:</span>
-                    <span>₹{basePrice.toLocaleString()}</span>
-                  </div>
-                  
-                  {additionalServices.dj && (
-                    <div className="flex justify-between">
-                      <span>DJ Services:</span>
-                      <span>₹10,000</span>
-                    </div>
-                  )}
-                  
-                  {additionalServices.drinking && (
-                    <div className="flex justify-between">
-                      <span>Drinking Permission:</span>
-                      <span>₹15,000</span>
-                    </div>
-                  )}
-                  
-                  {additionalServices.bonfire && (
-                    <div className="flex justify-between">
-                      <span>Bonfire:</span>
-                      <span>₹2,500</span>
-                    </div>
-                  )}
-                  
-                  {includeFoodService && foodCost > 0 && (
-                    <>
-                      <div className="pt-2 border-t border-dashed">
-                        <div className="text-lg font-medium mb-2">Food Services</div>
-                        
-                        {mealCosts.breakfast > 0 && (
-                          <div className="flex justify-between">
-                            <span>Breakfast ({guestCount} guests):</span>
-                            <span>₹{mealCosts.breakfast.toLocaleString()}</span>
-                          </div>
-                        )}
-                        
-                        {mealCosts.lunch > 0 && (
-                          <div className="flex justify-between">
-                            <span>Lunch ({guestCount} guests):</span>
-                            <span>₹{mealCosts.lunch.toLocaleString()}</span>
-                          </div>
-                        )}
-                        
-                        {mealCosts.dinner > 0 && (
-                          <div className="flex justify-between">
-                            <span>Dinner ({guestCount} guests):</span>
-                            <span>₹{mealCosts.dinner.toLocaleString()}</span>
-                          </div>
-                        )}
-                        
-                        <div className="flex justify-between font-medium pt-2">
-                          <span>Total Food Cost:</span>
-                          <span>₹{foodCost.toLocaleString()}</span>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                  
-                  <div className="pt-4 border-t border-gray-300">
-                    <div className="flex justify-between text-lg font-bold">
-                      <span>Total:</span>
-                      <span>₹{totalPrice.toLocaleString()}</span>
-                    </div>
-                  </div>
+            <div className="mt-12">
+              <div className="flex flex-col lg:flex-row gap-8">
+                {/* Food Service Section - 70% width on large screens */}
+                <div className="lg:w-[70%]">
+                  <FoodService 
+                    guestCount={guestCount} 
+                    onFoodCostUpdate={handleFoodCostUpdate}
+                    dateRange={dateRange}
+                  />
                 </div>
                 
-                <Button className="w-full mt-6 bg-amber-500 hover:bg-amber-600"
-                onClick={handlePay} 
-                disabled={isLoading}
-                >
-                  Proceed to Payment
-                </Button>
-
-                
-
+                {/* Order Summary - 30% width on large screens, sticky on top */}
+                <div className="lg:w-[30%]">
+                  <div className="lg:sticky lg:top-36">
+                    <OrderSummary />
+                  </div>
+                </div>
               </div>
+            </div>
+          )}
         </div>
       </div>
       <Footer />
 
       {isLoading && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-    <div className="bg-white p-8 rounded-lg shadow-lg text-center animate-pulse">
-      <p className="text-xl font-semibold mb-4">Proceeding to Payment...</p>
-      <div className="h-2 w-2/3 mx-auto bg-amber-500 rounded-full animate-bounce"></div>
-    </div>
-  </div>
-)}
-
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg text-center animate-pulse">
+            <p className="text-xl font-semibold mb-4">Proceeding to Payment...</p>
+            <div className="h-2 w-2/3 mx-auto bg-amber-500 rounded-full animate-bounce"></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
