@@ -353,7 +353,7 @@ const Booking = () => {
                   <label className="block text-sm font-medium mb-2">Number of Guests</label>
                   <Input 
                     type="number" 
-                    min="1" 
+                    min="10" 
                     value={guestCount}
                     onChange={handleGuestCountChange}
                     placeholder="Enter number of guests" 

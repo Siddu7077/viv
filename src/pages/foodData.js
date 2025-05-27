@@ -5,7 +5,7 @@ export  const foodMenuData = {
     silver: {
       name: "Silver Breakfast",
       price: 400,
-      description: "Essential South Indian breakfast menu",
+      description: "Essential South Indian breakfast menu. Tea & Coffee etc. are complementary.",
       items: [
         { id: "bs1", name: "Idli with Sambar", image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop", description: "Steamed rice cakes with lentil soup" },
         { id: "bs2", name: "Plain Dosa", image: "https://images.unsplash.com/photo-1630409351217-bc4fa6422075?w=800&auto=format&fit=crop", description: "Thin crispy rice pancake" },
@@ -16,7 +16,7 @@ export  const foodMenuData = {
     gold: {
       name: "Gold Breakfast",
       price: 600,
-      description: "Premium breakfast selection with more variety",
+      description: "Premium breakfast selection with more variety. Tea & Coffee etc. are complementary.",
       items: [
         { id: "bg1", name: "Masala Dosa", image: "https://images.unsplash.com/photo-1650383030546-e00022e12637?w=800&auto=format&fit=crop", description: "Crispy pancake with spiced potato filling" },
         { id: "bg2", name: "Vada Sambar", image: "https://images.unsplash.com/photo-1626512173582-f613e0f4b67f?w=800&auto=format&fit=crop", description: "Savory lentil donuts with sambar" },
@@ -28,7 +28,8 @@ export  const foodMenuData = {
     diamond: {
       name: "Diamond Breakfast",
       price: 800,
-      description: "Gourmet breakfast with special items and fresh juices",
+      
+    description: "Gourmet breakfast with special items and fresh juices. Tea & Coffee etc. are complementary.",
       items: [
         { id: "bd1", name: "Chettinad Egg Dosa", image: "https://images.unsplash.com/photo-1671646912835-a0d732be28cf?w=800&auto=format&fit=crop", description: "Crispy dosa with spiced egg topping" },
         { id: "bd2", name: "Appam with Stew", image: "https://images.unsplash.com/photo-1629358101753-531fa5a0a824?w=800&auto=format&fit=crop", description: "Fermented rice hoppers with vegetable stew" },

@@ -88,7 +88,7 @@ const MealSelection: React.FC<MealSelectionProps> = ({ selectedMeals, onMealSele
                 meal="breakfast"
                 title="Breakfast"
                 time="8:30 AM"
-                description="Traditional South & North Indian breakfast options"
+                description="Traditional South & North Indian breakfast options.(Tea & Coffee etc. are complementary)"
                 colorClass="orange"
                 imageUrl={getImageUrl('breakfast')}
             />
@@ -98,7 +98,7 @@ const MealSelection: React.FC<MealSelectionProps> = ({ selectedMeals, onMealSele
                 meal="lunch"
                 title="Lunch"
                 time="1:00 PM"
-                description="Delicious vegetarian & non-vegetarian lunch options"
+                description="Delicious vegetarian & non-vegetarian lunch options.(Tea & Coffee etc. are complementary)"
                 colorClass="green"
                 imageUrl={getImageUrl('lunch')}
             />
@@ -108,7 +108,7 @@ const MealSelection: React.FC<MealSelectionProps> = ({ selectedMeals, onMealSele
                 meal="dinner"
                 title="Dinner"
                 time="8:00 PM"
-                description="Elegant dining with premium cuisine options"
+                description="Elegant dining with premium cuisine options.(Tea & Coffee etc. are complementary)"
                 colorClass="indigo"
                 imageUrl={getImageUrl('dinner')}
             />
