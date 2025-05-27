@@ -132,7 +132,7 @@ const Booking = () => {
   // Handle guest count change
   const handleGuestCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0;
-    setGuestCount(value > 0 ? value : 1);
+    setGuestCount(value > 0 ? value : 10);
   };
 
   // Calculate total price based on all selections
