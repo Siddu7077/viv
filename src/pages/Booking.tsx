@@ -273,7 +273,7 @@ const Booking = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <div className="flex-grow bg-stone-50 pt-24">
-        <div className="container mx-auto py-16 px-4">
+        <div className="container mt-4 mx-auto py-16 px-4">
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-medium text-center mb-6">
             Book Your Stay
           </h1>
