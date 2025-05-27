@@ -31,7 +31,7 @@ const Booking = () => {
   const [checkIn, setCheckIn] = useState<Date | undefined>();
   const [checkOut, setCheckOut] = useState<Date | undefined>();
   const [basePrice, setBasePrice] = useState(36000);
-  const [guestCount, setGuestCount] = useState(1);
+  const [guestCount, setGuestCount] = useState(10);
   const [additionalServices, setAdditionalServices] = useState({
     dj: false,
     drinking: false,
