@@ -54,6 +54,13 @@ const Booking = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [dateRange, setDateRange] = useState<Date[]>([]);
 
+  // Customer details for Razorpay
+  const [customerDetails, setCustomerDetails] = useState({
+    name: '',
+    email: '',
+    phone: ''
+  });
+
   // Update date range when check-in or check-out changes
   useEffect(() => {
     if (checkIn && checkOut) {
@@ -71,6 +78,21 @@ const Booking = () => {
     }
   }, [checkIn, checkOut]);
 
+  // Load Razorpay script
+  useEffect(() => {
+    const loadRazorpayScript = () => {
+      return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      });
+    };
+
+    loadRazorpayScript();
+  }, []);
+
   // Handle package selection
   const handlePackageChange = (value: string) => {
     setBasePrice(value === "farmhouse" ? 36000 : 26000);
@@ -84,15 +106,106 @@ const Booking = () => {
     });
   };
 
+  // Handle customer details change
+  const handleCustomerDetailsChange = (field: string, value: string) => {
+    setCustomerDetails({
+      ...customerDetails,
+      [field]: value
+    });
+  };
+
+  // Razorpay payment handler
+  const handleRazorpayPayment = () => {
+    if (!customerDetails.name || !customerDetails.email || !customerDetails.phone) {
+      alert('Please fill in all customer details');
+      return;
+    }
+
+    const options = {
+      key: 'rzp_test_FoiXcVoSQtdELz', // Your Razorpay key
+      amount: totalPrice * 100, // Amount in paise
+      currency: 'INR',
+      name: 'Farmhouse Booking',
+      description: `Booking from ${checkIn ? format(checkIn, 'MMM d, yyyy') : ''} to ${checkOut ? format(checkOut, 'MMM d, yyyy') : ''}`,
+      image: '/logo.png', // Optional: Add your logo
+      order_id: '', // You should generate this from your backend
+      handler: function (response: any) {
+        // Payment success callback
+        console.log('Payment successful:', response);
+        alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+        
+        // Here you would typically:
+        // 1. Send the payment details to your backend
+        // 2. Confirm the booking
+        // 3. Send confirmation email
+        // 4. Redirect to success page
+        
+        // For now, we'll just show a success message
+        handlePaymentSuccess(response);
+      },
+      prefill: {
+        name: customerDetails.name,
+        email: customerDetails.email,
+        contact: customerDetails.phone,
+      },
+      notes: {
+        checkIn: checkIn ? format(checkIn, 'yyyy-MM-dd') : '',
+        checkOut: checkOut ? format(checkOut, 'yyyy-MM-dd') : '',
+        guests: guestCount.toString(),
+        services: Object.entries(additionalServices)
+          .filter(([_, selected]) => selected)
+          .map(([service]) => service)
+          .join(', '),
+        foodService: includeFoodService ? 'Yes' : 'No'
+      },
+      theme: {
+        color: '#F59E0B' // Amber color to match your theme
+      },
+      modal: {
+        ondismiss: function() {
+          setIsLoading(false);
+          console.log('Payment cancelled');
+        }
+      }
+    };
+
+    if (window.Razorpay) {
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } else {
+      alert('Razorpay SDK not loaded. Please try again.');
+      setIsLoading(false);
+    }
+  };
+
+  const handlePaymentSuccess = (response: any) => {
+    // Handle successful payment
+    setIsLoading(false);
+    
+    // You can add logic here to:
+    // - Save booking details to database
+    // - Send confirmation email
+    // - Clear form
+    // - Redirect to success page
+    
+    console.log('Booking confirmed with payment:', response);
+  };
+
   const handlePay = () => {
     setIsLoading(true);
     
-    // Simulate payment processing
-    setTimeout(() => {
+    // Validate required fields
+    if (!checkIn || !checkOut) {
+      alert('Please select check-in and check-out dates');
       setIsLoading(false);
-      alert("Redirecting to payment gateway...");
-      // You can navigate to the payment page here
-    }, 3000); // Simulate 3 seconds loading
+      return;
+    }
+
+    // In a real application, you would create an order on your backend first
+    // For now, we'll proceed directly to Razorpay
+    setTimeout(() => {
+      handleRazorpayPayment();
+    }, 1000);
   };
 
   // Handle food service toggle
@@ -258,13 +371,37 @@ const Booking = () => {
           </div>
         </div>
       </div>
+
+      {/* Customer Details Form */}
+      <div className="mt-6 pt-6 border-t border-gray-200">
+        <h4 className="font-medium mb-4">Customer Details</h4>
+        <div className="space-y-3">
+          <Input
+            placeholder="Full Name"
+            value={customerDetails.name}
+            onChange={(e) => handleCustomerDetailsChange('name', e.target.value)}
+          />
+          <Input
+            type="email"
+            placeholder="Email Address"
+            value={customerDetails.email}
+            onChange={(e) => handleCustomerDetailsChange('email', e.target.value)}
+          />
+          <Input
+            type="tel"
+            placeholder="Phone Number"
+            value={customerDetails.phone}
+            onChange={(e) => handleCustomerDetailsChange('phone', e.target.value)}
+          />
+        </div>
+      </div>
       
       <Button 
         className="w-full mt-6 bg-amber-500 hover:bg-amber-600"
         onClick={handlePay} 
-        disabled={isLoading || !checkIn || !checkOut}
+        disabled={isLoading || !checkIn || !checkOut || !customerDetails.name || !customerDetails.email || !customerDetails.phone}
       >
-        {isLoading ? "Processing..." : "Proceed to Payment"}
+        {isLoading ? "Processing..." : "Pay Now with Razorpay"}
       </Button>
     </div>
   );

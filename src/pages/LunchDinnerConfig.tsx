@@ -16,11 +16,11 @@ interface LunchDinnerConfigProps {
 }
 
 const LunchDinnerConfig: React.FC<LunchDinnerConfigProps> = ({
-    mealType = 'lunch', // Default value
+    mealType = 'lunch',
     date,
-    config = {}, // Default value
+    config = {},
     updateConfig,
-    guestCount = 1 // Default value
+    guestCount = 1
 }) => {
     const [selectedCuisine, setSelectedCuisine] = useState(config.cuisine || "");
     const [selectedPackage, setSelectedPackage] = useState(config.package || "");
@@ -43,28 +43,6 @@ const LunchDinnerConfig: React.FC<LunchDinnerConfigProps> = ({
 
     const selectionLimits = getSelectionLimits(selectedPackage);
 
-    // Update parent config when local state changes
-    useEffect(() => {
-        if (updateConfig) {
-            updateConfig({
-                cuisine: selectedCuisine,
-                package: selectedPackage,
-                items: selectedItems
-            });
-        }
-
-        // Validate selection
-        if (selectedPackage && selectedCuisine) {
-            const hasValidStarters = selectedItems.starters.length >= Math.min(selectionLimits.starters, getAvailableItems('starters')?.length || 0);
-            const hasValidMain = selectedItems.mainCourse.length >= Math.min(selectionLimits.mainCourse, getAvailableItems('mainCourse')?.length || 0);
-            const hasValidDesserts = selectedItems.desserts.length >= Math.min(selectionLimits.desserts, getAvailableItems('desserts')?.length || 0);
-            
-            setValidationError(!(hasValidStarters && hasValidMain && hasValidDesserts));
-        } else {
-            setValidationError(false);
-        }
-    }, [selectedCuisine, selectedPackage, selectedItems, selectionLimits, updateConfig]);
-
     // Get available items for a category
     const getAvailableItems = (category: string) => {
         if (!selectedCuisine || !selectedPackage || !foodMenuData) return [];
@@ -73,15 +51,40 @@ const LunchDinnerConfig: React.FC<LunchDinnerConfigProps> = ({
 
     // Handle cuisine selection
     const handleCuisineSelect = (cuisine: string) => {
+        const newSelectedPackage = "";
+        const newSelectedItems = { starters: [], mainCourse: [], desserts: [] };
+        
         setSelectedCuisine(cuisine);
-        setSelectedPackage(""); // Reset package when cuisine changes
-        setSelectedItems({ starters: [], mainCourse: [], desserts: [] }); // Reset items
+        setSelectedPackage(newSelectedPackage);
+        setSelectedItems(newSelectedItems);
+        
+        updateConfig({
+            cuisine: cuisine,
+            package: newSelectedPackage,
+            items: newSelectedItems
+        });
+        setValidationError(false);
     };
 
     // Handle package selection
     const handlePackageSelect = (packageKey: string) => {
+        const newSelectedItems = { starters: [], mainCourse: [], desserts: [] };
+        
         setSelectedPackage(packageKey);
-        setSelectedItems({ starters: [], mainCourse: [], desserts: [] }); // Reset items when package changes
+        setSelectedItems(newSelectedItems);
+        
+        updateConfig({
+            cuisine: selectedCuisine,
+            package: packageKey,
+            items: newSelectedItems
+        });
+        
+        // Validate immediately
+        const limits = getSelectionLimits(packageKey);
+        const isValid = Object.entries(limits).every(([category, limit]) => {
+            return newSelectedItems[category].length >= Math.min(limit, getAvailableItems(category)?.length || 0);
+        });
+        setValidationError(!isValid);
     };
 
     // Handle item selection
@@ -90,22 +93,37 @@ const LunchDinnerConfig: React.FC<LunchDinnerConfigProps> = ({
             const currentItems = prev[category] || [];
             const limit = selectionLimits[category];
             
-            if (currentItems.includes(itemId)) {
-                // Remove if already selected
-                return {
-                    ...prev,
-                    [category]: currentItems.filter(id => id !== itemId)
-                };
-            } else if (currentItems.length < limit) {
-                // Add if under limit
-                return {
-                    ...prev,
-                    [category]: [...currentItems, itemId]
-                };
-            }
-            return prev;
+            const newItems = currentItems.includes(itemId)
+                ? currentItems.filter(id => id !== itemId)
+                : currentItems.length < limit
+                    ? [...currentItems, itemId]
+                    : currentItems;
+            
+            const newSelectedItems = {
+                ...prev,
+                [category]: newItems
+            };
+            
+            // Update parent config immediately
+            updateConfig({
+                cuisine: selectedCuisine,
+                package: selectedPackage,
+                items: newSelectedItems
+            });
+            
+            return newSelectedItems;
         });
     };
+
+    // Update validation when selection limits change
+    useEffect(() => {
+        if (selectedPackage && selectedCuisine) {
+            const isValid = Object.entries(selectionLimits).every(([category, limit]) => {
+                return selectedItems[category].length >= Math.min(limit, getAvailableItems(category)?.length || 0);
+            });
+            setValidationError(!isValid);
+        }
+    }, [selectedItems, selectionLimits, selectedPackage, selectedCuisine]);
 
     // Cuisine card component
     const CuisineCard = ({ cuisineKey }: { cuisineKey: string }) => {
@@ -114,10 +132,11 @@ const LunchDinnerConfig: React.FC<LunchDinnerConfigProps> = ({
 
         return (
             <div
-                className={`p-4 border rounded-lg cursor-pointer transition-all shadow-sm hover:shadow-md ${isSelected
+                className={`p-4 border rounded-lg cursor-pointer transition-all shadow-sm hover:shadow-md ${
+                    isSelected
                         ? 'bg-blue-100 border-blue-300'
                         : 'border-gray-200 hover:border-blue-200'
-                    }`}
+                }`}
                 onClick={() => handleCuisineSelect(cuisineKey)}
             >
                 <div className="flex justify-between items-center mb-2">
@@ -137,10 +156,11 @@ const LunchDinnerConfig: React.FC<LunchDinnerConfigProps> = ({
 
         return (
             <div
-                className={`p-4 border rounded-lg cursor-pointer transition-all shadow-sm hover:shadow-md ${isSelected
+                className={`p-4 border rounded-lg cursor-pointer transition-all shadow-sm hover:shadow-md ${
+                    isSelected
                         ? 'bg-green-100 border-green-300'
                         : 'border-gray-200 hover:border-green-200'
-                    }`}
+                }`}
                 onClick={() => handlePackageSelect(packageKey)}
             >
                 <div className="flex justify-between items-center mb-2">
@@ -159,10 +179,11 @@ const LunchDinnerConfig: React.FC<LunchDinnerConfigProps> = ({
 
         return (
             <div
-                className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${isSelected
+                className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                    isSelected
                         ? 'bg-purple-50 border-purple-400 shadow-sm'
                         : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                }`}
                 onClick={() => handleItemSelection(category, item?.id)}
             >
                 <div className="flex justify-between items-center mb-2">

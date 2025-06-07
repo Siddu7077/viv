@@ -27,11 +27,7 @@ const FoodService: React.FC<FoodServiceProps> = ({ guestCount, dateRange, onFood
     });
 
     // Day-wise meal configurations
-    // Structure: { date: { breakfast: {type, package, items}, lunch: {...}, dinner: {...} } }
-    const [dayWiseMealConfig, setDayWiseMealConfig] = useState({});
-
-    // Validation errors for each day and meal
-    const [validationErrors, setValidationErrors] = useState({});
+    const [dayWiseMealConfig, setDayWiseMealConfig] = useState<Record<string, any>>({});
 
     // Calculate total costs
     const calculateTotalCosts = useMemo(() => {
@@ -100,8 +96,10 @@ const FoodService: React.FC<FoodServiceProps> = ({ guestCount, dateRange, onFood
             setDayWiseMealConfig(prev => {
                 const updated = { ...prev };
                 Object.keys(updated).forEach(dateKey => {
-                    if (updated[dateKey][meal]) {
-                        delete updated[dateKey][meal];
+                    if (updated[dateKey]?.[meal]) {
+                        const newDayConfig = { ...updated[dateKey] };
+                        delete newDayConfig[meal];
+                        updated[dateKey] = newDayConfig;
                     }
                 });
                 return updated;

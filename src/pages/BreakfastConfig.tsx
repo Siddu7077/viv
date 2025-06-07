@@ -36,40 +36,42 @@ const BreakfastConfig: React.FC<BreakfastConfigProps> = ({
 
     const selectionLimit = getSelectionLimit(selectedPackage);
 
-    // Update parent config when local state changes
-    useEffect(() => {
-        updateConfig({
-            package: selectedPackage,
-            items: selectedItems
-        });
-
-        // Validate selection
-        if (selectedPackage && selectedItems.length < selectionLimit) {
-            setValidationError(true);
-        } else {
-            setValidationError(false);
-        }
-    }, [selectedPackage, selectedItems, selectionLimit, updateConfig]);
-
     // Handle package selection
     const handlePackageSelect = (packageKey: string) => {
+        const newSelectedItems = []; // Reset items when package changes
         setSelectedPackage(packageKey);
-        setSelectedItems([]); // Reset items when package changes
+        setSelectedItems(newSelectedItems);
+        
+        // Update parent config immediately
+        updateConfig({
+            package: packageKey,
+            items: newSelectedItems
+        });
+        
+        // Validate selection
+        setValidationError(newSelectedItems.length < getSelectionLimit(packageKey));
     };
 
     // Handle item selection
     const handleItemSelection = (itemId: string) => {
-        setSelectedItems(prev => {
-            if (prev.includes(itemId)) {
-                // Remove if already selected
-                return prev.filter(id => id !== itemId);
-            } else if (prev.length < selectionLimit) {
-                // Add if under limit
-                return [...prev, itemId];
-            }
-            return prev;
+        const newSelectedItems = selectedItems.includes(itemId)
+            ? selectedItems.filter(id => id !== itemId)
+            : selectedItems.length < selectionLimit
+                ? [...selectedItems, itemId]
+                : selectedItems;
+                
+        setSelectedItems(newSelectedItems);
+        updateConfig({
+            package: selectedPackage,
+            items: newSelectedItems
         });
+        setValidationError(newSelectedItems.length < selectionLimit);
     };
+
+    // Update validation when selection limit changes
+    useEffect(() => {
+        setValidationError(selectedItems.length < selectionLimit);
+    }, [selectionLimit, selectedItems.length]);
 
     // Package card component
     const PackageCard = ({ packageKey, packageData }: { packageKey: string, packageData: any }) => {
@@ -77,10 +79,11 @@ const BreakfastConfig: React.FC<BreakfastConfigProps> = ({
 
         return (
             <div
-                className={`p-4 border rounded-lg cursor-pointer transition-all shadow-sm hover:shadow-md ${isSelected
+                className={`p-4 border rounded-lg cursor-pointer transition-all shadow-sm hover:shadow-md ${
+                    isSelected
                         ? 'bg-orange-100 border-orange-300'
                         : 'border-gray-200 hover:border-orange-200'
-                    }`}
+                }`}
                 onClick={() => handlePackageSelect(packageKey)}
             >
                 <div className="flex justify-between items-center mb-2">
@@ -99,10 +102,11 @@ const BreakfastConfig: React.FC<BreakfastConfigProps> = ({
 
         return (
             <div
-                className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${isSelected
+                className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                    isSelected
                         ? 'bg-orange-50 border-orange-400 shadow-sm'
                         : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                }`}
                 onClick={() => handleItemSelection(item.id)}
             >
                 <div className="flex justify-between items-center mb-2">
