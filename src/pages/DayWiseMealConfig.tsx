@@ -5,6 +5,7 @@ import { Calendar } from "lucide-react";
 // Import sub-components
 import SingleDayMealConfig from './SingleDayMealConfig';
 
+
 interface DayWiseMealConfigProps {
     dateRange: Date[];
     selectedMeals: {

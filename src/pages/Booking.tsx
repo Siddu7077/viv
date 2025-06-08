@@ -112,6 +112,7 @@ const Booking = () => {
       ...customerDetails,
       [field]: value
     });
+    
   };
 
   // Razorpay payment handler
