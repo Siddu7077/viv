@@ -30,8 +30,8 @@ import FoodService from './FoodService';
 const Booking = () => {
   const [checkIn, setCheckIn] = useState<Date | undefined>();
   const [checkOut, setCheckOut] = useState<Date | undefined>();
-  const [basePrice, setBasePrice] = useState(36000);
-  const [guestCount, setGuestCount] = useState(10);
+  const [basePrice, setBasePrice] = useState(3);
+  const [guestCount, setGuestCount] = useState(15);
   const [additionalServices, setAdditionalServices] = useState({
     dj: false,
     drinking: false,
@@ -95,7 +95,7 @@ const Booking = () => {
 
   // Handle package selection
   const handlePackageChange = (value: string) => {
-    setBasePrice(value === "farmhouse" ? 36000 : 26000);
+    setBasePrice(value === "farmhouse" ? 3 : 2);
   };
 
   // Handle additional services changes
@@ -116,10 +116,10 @@ const Booking = () => {
 
   // Razorpay payment handler
   const handleRazorpayPayment = () => {
-    if (!customerDetails.name || !customerDetails.email || !customerDetails.phone) {
-      alert('Please fill in all customer details');
-      return;
-    }
+    // if (!customerDetails.name || !customerDetails.email || !customerDetails.phone) {
+    //   alert('Please fill in all customer details');
+    //   return;
+    // }
 
     const options = {
       key: 'rzp_test_FoiXcVoSQtdELz', // Your Razorpay key
@@ -245,7 +245,7 @@ const Booking = () => {
   // Handle guest count change
   const handleGuestCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0;
-    setGuestCount(value > 0 ? value : 10);
+    setGuestCount(value > 0 ? value : 15);
   };
 
   // Calculate total price based on all selections
@@ -372,8 +372,8 @@ const Booking = () => {
         </div>
       </div>
 
-      {/* Customer Details Form */}
-      <div className="mt-6 pt-6 border-t border-gray-200">
+      {/* Customer Details Form*/}
+      {/* <div className="mt-6 pt-6 border-t border-gray-200">
         <h4 className="font-medium mb-4">Customer Details</h4>
         <div className="space-y-3">
           <Input
@@ -394,12 +394,13 @@ const Booking = () => {
             onChange={(e) => handleCustomerDetailsChange('phone', e.target.value)}
           />
         </div>
-      </div>
+      </div>  */}
       
       <Button 
         className="w-full mt-6 bg-amber-500 hover:bg-amber-600"
         onClick={handlePay} 
-        disabled={isLoading || !checkIn || !checkOut || !customerDetails.name || !customerDetails.email || !customerDetails.phone}
+        // disabled={isLoading || !checkIn || !checkOut || !customerDetails.name || !customerDetails.email || !customerDetails.phone}
+        disabled={isLoading || !checkIn || !checkOut}
       >
         {isLoading ? "Processing..." : "Pay Now with Razorpay"}
       </Button>
@@ -490,7 +491,7 @@ const Booking = () => {
                   <label className="block text-sm font-medium mb-2">Number of Guests</label>
                   <Input 
                     type="number" 
-                    min="10" 
+                    min="15" 
                     value={guestCount}
                     onChange={handleGuestCountChange}
                     placeholder="Enter number of guests" 
