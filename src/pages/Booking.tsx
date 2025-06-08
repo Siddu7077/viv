@@ -112,7 +112,7 @@ const Booking = () => {
       ...customerDetails,
       [field]: value
     });
-    
+
   };
 
   // Razorpay payment handler
@@ -123,7 +123,7 @@ const Booking = () => {
     // }
 
     const options = {
-      key: 'rzp_test_FoiXcVoSQtdELz', // Your Razorpay key
+      key: 'rzp_live_Kx00d9elvHbrtP', // Your Razorpay key
       amount: totalPrice * 100, // Amount in paise
       currency: 'INR',
       name: 'Farmhouse Booking',
